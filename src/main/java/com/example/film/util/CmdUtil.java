@@ -1,7 +1,5 @@
 package com.example.film.util;
 
-import com.example.film.constant.BaseConstant;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +41,7 @@ public class CmdUtil {
 				}
 			}.start();
 
-			new Thread(() -> {
+
 				BufferedReader br2 = new  BufferedReader(new  InputStreamReader(is2));
 				try {
 					String line2 = null ;
@@ -60,7 +58,7 @@ public class CmdUtil {
 						e.printStackTrace();
 					}
 				}
-			}).start();
+
 			try
 			{
 				p.waitFor ();

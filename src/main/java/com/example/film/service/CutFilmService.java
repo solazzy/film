@@ -1,6 +1,5 @@
 package com.example.film.service;
 
-import com.example.film.util.CmdUtil;
 import com.example.film.util.FFmpegCmd;
 import com.example.film.util.FFprobeCmd;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class CutFilmService {
         String [] fileName = file.list();
         System.out.println(Arrays.toString(fileName));
         try {
-            CmdUtil.execCmd("mkdir "+ path+"/"+"process");
+            Runtime.getRuntime().exec("mkdir "+ path+"/"+"process");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,6 +29,18 @@ public class CutFilmService {
                 int videoTime = FFprobeCmd.showEntries(path + "/" + s);
                 System.out.println("videoTime ="+videoTime);
                 video_cut_1(path ,s,videoTime);
+            }
+        }
+
+        for (int i = 0; i < 3 ; i++) {
+            try {
+                String save_name = path + "/process/";
+                String aiPath = path+"/process/ai-"+i;
+                Runtime.getRuntime().exec("mkdir "+ aiPath);
+                String outPut = String.format ("%s%s.mp4",save_name,i);
+                FFmpegCmd.VideoSplitToNMethod( outPut,20,aiPath);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

@@ -74,6 +74,18 @@ public class FFmpegCmd {
 	}
 
 	/**
+	 * 视频按n秒分段
+	 * @param videoPath 文件路径
+	 * @param length 截取时长
+	 * @param output 输出路径
+	 */
+	public static void VideoSplitToNMethod(String videoPath,int length,String output ){
+		String cmd = String.format (BaseConstant.Video_SPLIT_TO_N,videoPath,length,output)+"/%04d.ts";
+		CmdUtil.execCmd (cmd);
+	}
+
+
+	/**
 	 * 提取视频的第一张图片作为封面
 	 * @param filePath
 	 * @param path
