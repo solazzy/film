@@ -1,81 +1,77 @@
 package com.example.film.service;
 
+import com.example.film.constant.BaseConstant;
 import com.example.film.util.CmdUtil;
+import com.example.film.util.FFmpegCmd;
+import com.example.film.util.FFprobeCmd;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
 import java.util.Arrays;
 
 @Service
 public class HandleFilmService {
-
-    public String cutFilm(String path){
-        File file =  new  File(path);
-        String [] fileName = file.list();
-        System.out.println(Arrays.toString(fileName));
-        try {
-            CmdUtil.execCmd("mkdir "+ path+"/"+"process");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        for (String s : fileName) {
-            if (s.contains("mp4")){
-                int videoTime = getVideoTime(path + "/" + s);
-                System.out.println("videoTime ="+videoTime);
-                video_cut_1(path ,s,videoTime);
-            }
-        }
-
-        return "success";
-    }
+    @Autowired
+    CutFilmService cutFilmService;
 
     /**
-     * 对传递过来的视频名字、视频时间做剪辑分段处理
-     * @param path
-     * @param name
-     * @param time
-     */
-    public void video_cut_1(String path,String name,int time){
-
-        int cutTime= time / 3;
-        int firstTime=0;
-
-        String file = path + '/' + name;
-        String save_name = path + "/process/";
-
-        for (int i = 0; i <3 ; i++) {
-            String cmdLine = "ffmpeg -ss "+ firstTime +" -i " +file +" "+" -c copy -t " +cutTime + " "+save_name+i+".mp4 -loglevel quiet -y ";
-            CmdUtil.execCmd(cmdLine);
-            firstTime+=cutTime;
-        }
-    }
-
-    /**
-     * 获取视频长度
-     * @param path
+     * 处理视频
+     * @param filePath
      * @return
      */
-    public int getVideoTime(String path) {
-        String command="ffprobe "+path+" -show_entries format=duration -of compact=p=0:nk=1 -v 0";
-        String line = null;
-        StringBuilder sb = new StringBuilder();
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process process = runtime.exec(command);
-            BufferedReader	bufferedReader = new BufferedReader
-                    (new InputStreamReader(process.getInputStream()));
-
-
-            while ((line = bufferedReader.readLine()) != null) {
-                System.out.println(line);
-                int i = Double.valueOf(line).intValue();
-                return i;
-            }
-        } catch (IOException e) {
-            // TODO 自动生成的 catch 块
-            e.printStackTrace();
+    public String handleFilm(String filePath){
+        File file =  new  File(filePath);
+        String [] fileNames = file.list();
+        System.out.println(Arrays.toString(fileNames));
+        if (fileNames.length == 0) {
+            return null;
         }
-        return 0;
+        // 创建process文件夹
+        CmdUtil.execCmd(String.format(BaseConstant.MAKE_PROCESS,filePath));
+
+        for (String fileName : fileNames) {
+            if (fileName.contains("mp4")){
+                int videoTime = FFprobeCmd.showEntries(filePath + "/" + fileName);
+                System.out.println("videoTime ="+videoTime);
+
+                int length= videoTime / 3;
+                int start=0;
+
+                String videoPath = path + '/' + name;
+                String save_name = path + "/process/";
+
+                for (int i = 0; i <3 ; i++) {
+                    String outPut = String.format ("%s%s.mp4",save_name,i);
+                    FFmpegCmd.VideoSplitToMethod(start,videoPath,length,outPut);
+                    start+=length;
+                }
+            }
+        }
+
+        /**
+         * 对传递过来的视频名字、视频时间做剪辑分段处理
+         * @param path
+         * @param name
+         * @param time
+         */
+
+
+
+
+
+
+
+        CmdUtil.execCmd(String.format(BaseConstant.VIDEO_FIRST_IMAGE,filePath,path,BaseConstant.IMAGE_NAME));
+
+        cutFilmService.cutFilmToThree(filePath);
+
+        CmdUtil.execCmd(String.format(BaseConstant.FILL_IMAGE_BLACK,filePath,path,BaseConstant.IMAGE_NAME));
+        // 将视频处理成三段
+
+
+
+        return "success";
     }
 
 }

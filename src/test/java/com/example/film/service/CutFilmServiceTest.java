@@ -1,15 +1,14 @@
-package com.example.film;
+package com.example.film.service;
 
-import com.example.film.service.HandleFilmService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FilmApplicationTests {
+class CutFilmServiceTest {
 
     @Autowired
-    HandleFilmService handleFilmService;
+    CutFilmService cutFilmService;
 
     @Test
     void contextLoads() {
@@ -17,7 +16,7 @@ class FilmApplicationTests {
 
     @Test
     void cutFilmTest(){
-        handleFilmService.cutFilm("/Users/shixin/film/fire/2022-03-19");
+        cutFilmService.cutFilmToThree("/Users/shixin/film/fire/2022-03-19");
     }
 
 }
