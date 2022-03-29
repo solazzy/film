@@ -1,9 +1,6 @@
 package com.example.film.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class CmdUtil {
 
@@ -75,6 +72,39 @@ public class CmdUtil {
 			e.printStackTrace ();
 		}
 		return null;
+	}
+
+	public static void writeTxtFile(String content, String filePath)
+	{
+
+		FileWriter fw = null;
+		try
+		{
+			File file = new File(filePath);
+			if (!file.exists())
+			{
+				file.createNewFile();
+			}
+			fw = new FileWriter(filePath);
+			fw.write(content);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				fw.close();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 }
 

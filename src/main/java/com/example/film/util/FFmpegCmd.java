@@ -76,11 +76,10 @@ public class FFmpegCmd {
 	/**
 	 * 视频按n秒分段
 	 * @param videoPath 文件路径
-	 * @param length 截取时长
 	 * @param output 输出路径
 	 */
-	public static void VideoSplitToNMethod(String videoPath,int length,String output ){
-		String cmd = String.format (BaseConstant.Video_SPLIT_TO_N,videoPath,length,output)+"/%04d.ts";
+	public static void VideoSplitToNMethod(String videoPath,String output ){
+		String cmd = String.format (BaseConstant.VIDEO_SPLIT_TO_N,videoPath,output)+"/%03d.mp4";
 		CmdUtil.execCmd (cmd);
 	}
 

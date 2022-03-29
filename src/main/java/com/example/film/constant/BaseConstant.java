@@ -46,7 +46,10 @@ public class BaseConstant {
     /**
      * 视频切分为n秒一个
      */
-    public static final String Video_SPLIT_TO_N ="ffmpeg -i %s -f segment -segment_time %s  -c copy -bsf:v h264_mp4toannexb -map 0 %s";
+    public static final String VIDEO_SPLIT_TO_N_TS ="ffmpeg -i %s -f segment -segment_time %s  -c copy -bsf:v h264_mp4toannexb -map 0 %s";
+
+    public static final String VIDEO_SPLIT_TO_N ="ffmpeg -i %s -c copy -map 0 -segment_time 00:00:20 -f segment -reset_timestamps 1 %s";
+
     /**
      * 获取视频的第一张图片
      */

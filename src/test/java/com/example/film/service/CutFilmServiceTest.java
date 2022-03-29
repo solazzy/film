@@ -16,7 +16,7 @@ class CutFilmServiceTest {
 
     @Test
     void cutFilmTest(){
-        cutFilmService.cutFilmToThree("/Users/shixin/film/fire/2022-03-27");
+        cutFilmService.cutFilmToThree("/Users/shixin/film/fire/2022-03-28");
     }
 
 }
